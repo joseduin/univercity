@@ -1,0 +1,99 @@
+<% @title = ("UCLABOOK - Editar Mi Perfil" ) %>
+        
+        <div class="row wrapper border-bottom page-heading fondo_verde">
+            <div class="col-lg-12" style="padding: 40px 0;">
+                <center>
+                    <h1 style="font-weight: 900;font-size: -webkit-xxx-large; color: black"><%= @perfil.username.capitalize %></h1>
+                </center>
+            </div>
+        </div>
+            
+        <div style="margin: 0 0 20px 220px;">
+            
+            <nav class="navbar navbar-inverse" style="margin-bottom: 0;border-radius: 0;border-top: 1px solid #81F7F3;">
+                  <div class="container-fluid">
+                    <ul class="nav navbar-nav" >
+                      <li><%= link_to 'Posts', perfiles_path, method: :get %></li>
+                        <% if session[:id] == @perfil.id_usuario %>
+                            <li><%= link_to "Seguidos", "/seguids/seguidos/#{session[:id]}", method: :get %></li>
+                        <% else %>
+                            <li><%= link_to "Seguidos", "/seguids/seguidos/#{params[:id]}", method: :get %></li>
+                        <% end %>
+                        <% if session[:id] == @perfil.id_usuario %>
+                            <li><%= link_to "Seguidores", "/seguids/seguidores/#{session[:id]}", method: :get %></li>
+                        <% else %>
+                            <li><%= link_to "Seguidores", "/seguids/seguidores/#{params[:id]}", method: :get %></li>
+                        <% end %>
+                    
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" id="segunda">
+                    <% if session[:id] == @perfil.id_usuario %>
+                                        
+                        <li><%= link_to 'Editar Perfil', perfiles_mi_perfil_editar_path, class: 'active', method: :get %></li>
+                                        
+                    <% else %>
+                                            
+                        <li><%= link_to 'Enviar Mensaje', "/mensaje/redactar_mensaje?user=#{@perfil.id_usuario}", method: :get %></li>
+                                            
+                        <% unless @seguidores.include? session[:id] %>
+                                            
+                            <li><%= link_to 'Seguir', "/seguids/seguir/#{params[:id]}" , method: :post %></li>
+                                            
+                        <% else %>
+                                            
+                            <li><%= link_to 'Dejar Seguir', "/seguids/dejar_de_seguir/#{params[:id]}", method: :post %></li>
+                                            
+                        <% end %>
+                                        
+                    <% end %>
+                    </ul>
+                  </div>
+            </nav>    
+        </div>
+       
+            
+        <div style="position: fixed;top: 60px;left: 10px;padding: 5px;border-radius: 5px;background-color: black;">
+            <%= ('<img  width="200" height="200" class="img-responsive" id="%s" alt="%s" src="data:%s;base64,%s">' % [@imagen_perfil.id, @imagen_perfil.filename, @imagen_perfil.tipo, @imagen_perfil.data]).html_safe %>
+        </div>
+        <div style="margin: 0 0 0 220px;">
+            <form action="/perfiles/validar_editar" method="POST" class="m-t"
+            enctype="multipart/form-data">
+                <%= token_tag %>
+
+                <div class="form-group" style="padding-bottom: 30px;">
+                    <label class="control-label col-sm-4" >Username:</label>
+                    <div class="col-sm-8">
+                        <input type="text" value="<%= @perfil.username %>" name="username" class="form-control" placeholder="Username" required>
+                    </div>
+                </div>
+                <div class="form-group" style="padding-bottom: 30px;">
+                    <label class="control-label col-sm-4" >Correo electronico:</label>
+                    <div class="col-sm-8">
+                        <input type="text" value="<%= @usuario.email %>" name="email" class="form-control" placeholder="Correo electronico" required>
+                    </div>
+                </div>
+                <div class="form-group" style="padding-bottom: 30px;">
+                    <label class="control-label col-sm-4" >Cambiar foto:</label>
+                    <div class="col-sm-8">
+                        <input type="file" name="foto" class="form-control">
+                    </div>
+                </div>
+               
+                <div class="form-group" style="padding-bottom: 30px;">
+                    <label class="control-label col-sm-4" >Contraseña nueva:</label>
+                    <div class="col-sm-8">
+                        <input type="password" name="clave_nueva" class="form-control" placeholder="Contraseña nueva">
+                    </div>
+                </div>
+                <div class="form-group" style="padding-bottom: 30px;">
+                    <label class="control-label col-sm-4" >Repita contraseña:</label>
+                    <div class="col-sm-8">
+                        <input type="password" name="re_clave" class="form-control" placeholder="Repita contraseña">
+                    </div>
+                </div>
+                           
+                <br>
+                <br>
+                <button type="submit" class="btn btn-primary block full-width m-b">Guardar Cambios</button>
+            </form>    
+        </div>

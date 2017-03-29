@@ -1,0 +1,140 @@
+<% @title = ("UCLABOOK - Timeline Privado" ) %>
+            <div class="row">
+                <div class="col-lg-12">
+                    
+                    <!-- TIMELINE -->
+    <div style="margin-bottom: 20px; margin-top: 20px;">
+        <div style="width: 80%;margin: 0 auto;">
+            <form action="/posts/postear" method="POST" 
+            enctype="multipart/form-data" style="background-color: #222;padding: 2% 20%;">
+                <%= token_tag %>
+                <input type="hidden" name="titulo" value="">
+                <textarea name="contenido" class="form-control message-input" placeholder="¿Que estas pensando?"></textarea>
+                <br>
+                <label for="file-upload" class="btn boton_color_verde btn-primary" style="cursor: pointer;position: absolute;color: white;">
+                        <i class="fa fa-upload"></i> Subir Imagen
+                </label>
+                <input id="file-upload" name="foto" type="file" style="display: none;"/>
+                <button class="btn boton_color_verde btn-primary navbar-right" style="margin-right: 5px;">Publicar</button>
+                <div style="clear:both"></div>
+            </form>
+        </div>  
+        
+        <%= link_to timeline_publico_path, method: :get do%>
+        <div class="flecha"><span>Publico</span></div>
+        <% end %>
+        
+    </div>                
+                   
+                            
+                                    <% @postes.each do |posts| %>
+                                    
+                                    <div class="fondo_verde" style="padding: 5px;margin: 0 auto;border-radius: 10px;margin-bottom: 20px;width: 80%;">
+                                        <div style="background-color: white;padding: 5px;">
+                                            <!-- Datos del usuario -->
+                                            <div class="col-md-12">
+                                                <div>
+                                                    <%= link_to perfile_path( posts.perfil.id_usuario ), class: 'forum-avatar' , method: :get do %>
+                                                        <%= ('<img width="50" id="%s" alt="%s" src="data:%s;base64,%s">' % [posts.imagen.id, posts.imagen.filename, posts.imagen.tipo, posts.imagen.data]).html_safe %>
+                                                    <% end %>
+                                                </div>
+                                                <div>
+                                                    
+                                                    <strong><%= posts.perfil.username.capitalize %></strong>
+                                                    <div>
+                                                        <strong>fecha:</strong> <%= posts.post.fecha %>
+                                                    </div>
+                                                    <div style="top: 0;position: absolute;right: 0;">
+                                                        <% if session[:id] == posts.perfil.id_usuario %>
+                                                            <%= link_to '<i class="fa fa-times"></i>'.html_safe, "/posts/eliminar_post/#{posts.post.id}", class: "btn btn-danger dim", method: :post %>
+                                                        <% end %>
+                                                    </div>
+                                                </div>
+                                                <div style="clear:both"></div>
+                                                <hr>
+                                            </div>
+                                            
+                                            <!-- Contenido -->
+                                            <div>
+                                                <p style="font-size: 20pt;margin-left: 30px;"><%= posts.post.contenido %></p>
+                                                <hr>
+                                            </div>
+                                            <!-- Imagen si existe -->
+                                            <div>
+                                                <% unless posts.post.estatus.to_i == 0 %>
+                                                    <center>
+                                                        <%= ('<img width="400" height="400" id="%s" alt="%s" src="data:%s;base64,%s">' % [posts.post.imagen.id, posts.post.imagen.filename, posts.post.imagen.tipo, posts.post.imagen.data]).html_safe %>
+                                                    </center>
+                                                    <hr>
+                                                <% end %>
+                                                
+                                            </div>
+                                            <!-- Botones -->
+                                            <div>
+                                                <div class="col-md-4">
+                                                    <center>
+                                                       <% unless session[:id].nil? %>
+                                                            <a class="btn btn-danger dim"><i class="fa fa-heart"></i> Love</a>
+                                                        <% end %> 
+                                                    </center>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <center>
+                                                        <% unless session[:id].nil? %>
+                                                            <a class="btn btn-primary dim" data-toggle="collapse" data-target="#post<%= posts.post.id %>"><i class="fa fa-comments"></i> Comentar</a>
+                                                        <% end %>
+                                                    </center>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <center>
+                                                        <div class="dropdown profile-element"> <span></span>
+                                                                 
+                                                            <a data-toggle="dropdown" class="dropdown-toggle btn btn-info dim" href="#">
+                                                            <span class="text-muted text-xs block"><i class="fa fa-share"> Compartir</i> </span> </a>
+                                                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                                                
+                                                                <li><div class="fb-share-button btn btn-success dim" style="float: left;" data-href="<%= @web_url %>/posts/<%= posts.post.id %>" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<%= @web_uft8 %>%2Fposts%2F<%= posts.post.id %>&amp;src=sdkpreparse" style="height:20px"><i class="fa fa-facebook"></i></a></div></li>
+                                                                <li><div class="btn btn-info dim"><a href="https://twitter.com/share?url=<%= @web_uft8 %>%2Fposts%2F<%= posts.post.id %>&original_referer=<%= @web_uft8 %>%2Fposts%2F<%= posts.post.id %>&text=Univercity <%= posts.perfil.username.capitalize %> : <%= posts.post.contenido[0..70] %>. Sigue leyendo en " class="twitter-share-button" data-url="<%= @web_url %>/posts/<%= posts.post.id %>" data-lang="es" data-show-count="false" style="height:20px"><i class="fa fa-twitter"></i></a></div></li>
+                                                            
+                                                            </ul>
+                                                        </div>
+                                                    </center>
+                                                </div>
+                                                <div style="clear:both"></div>
+                                            </div>
+                                            <!-- Comentarios -->
+                                            <div class="col-md-12" style="margin-top: 20px;">
+                                                <!-- Comentar -->
+                                                <div class="media collapse" id="post<%= posts.post.id %>">
+                                                    <div class="media-body" style="width: auto;">
+                                                        <form action="/posts/comentar" method="POST">
+                                                            <%= token_tag %>
+                                                            <input type="hidden" name="id_post" value="<%= posts.post.id %>">
+                                                            <textarea name="contenido" class="form-control" placeholder="Escribe un comentario.."></textarea>
+                                                            <br>
+                                                            <button class="btn btn-primary btn-block">Comentar</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- Comentarios de los usuerios -->
+                                                <% posts.comentario.each do |comentario| %>
+                                                    <div class="col-md-12" style="border-bottom: 1px solid #81cbf7;">
+                                                        <%= link_to perfile_path(comentario.perfil.id_usuario.to_i), method: :get do %>
+                                                            <strong><%= comentario.perfil.username.capitalize %></strong>: 
+                                                        <% end %>
+                                                        <%= comentario.comentario.contenido %>
+                                                
+                                                            <br>
+                                                            <small class="text-muted"> <%= comentario.comentario.fecha %></small>
+                                                    </div>
+                                                    <hr style="border-bottom: 1px solid #81cbf7;">
+                                                    <div style="clear:both"></div>
+                                                <% end %>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both"></div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                    <% end %>
+                     </div>   
+                </div>

@@ -1,0 +1,243 @@
+<% if session[:id] == @perfil_amigo.id_usuario %>
+    <% @title = ("Univercity - Mi perfil" ) %>
+<% else %>
+    <% @title = ("Univercity - %s" %  @perfil_amigo.username.capitalize ) %>
+<% end %>
+
+            <div class="row wrapper border-bottom page-heading fondo_verde">
+                <div class="col-lg-12" style="padding: 40px 0;">
+                    <center>
+                        <h1 style="font-weight: 900;font-size: -webkit-xxx-large; color: black"><%= @perfil_amigo.username.capitalize %></h1>
+                    </center>
+                </div>
+            </div>
+            
+        <div style="margin: 0 0 0 220px;">
+            
+            <nav class="navbar navbar-inverse" style="margin-bottom: 0;border-radius: 0;">
+                  <div class="container-fluid">
+                    <ul class="nav navbar-nav" id="segunda">
+                      <li><%= link_to 'Posts', perfiles_path, class: 'active', method: :get %></li>
+                        <% if session[:id] == @perfil_amigo.id_usuario %>
+                            <li><%= link_to "Seguidos", "/seguids/seguidos/#{session[:id]}", method: :get %></li>
+                        <% else %>
+                            <% unless @seguidos.include? session[:id] %>
+                                <li><%= link_to "Seguidos", "/seguids/seguidos/#{params[:id]}", method: :get %></li>
+                            <% end %>
+                        <% end %>
+                        <% if session[:id] == @perfil_amigo.id_usuario %>
+                                <li><%= link_to "Seguidores", "/seguids/seguidores/#{session[:id]}", method: :get %></li>
+                        <% else %>
+                            <% unless @seguidos.include? session[:id] %>
+                                <li><%= link_to "Seguidores", "/seguids/seguidores/#{params[:id]}", method: :get %></li>
+                            <% end %>
+                        <% end %>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                    <% if session[:id] == @perfil_amigo.id_usuario %>
+                                        
+                        <li><%= link_to 'Editar Perfil', perfiles_mi_perfil_editar_path, method: :get %></li>
+                                        
+                    <% else %>
+                                            
+                        <li><%= link_to 'Enviar Mensaje', "/mensaje/redactar_mensaje?user=#{@perfil_amigo.id_usuario}", method: :get %></li>
+                                            
+                        <% unless @seguidores.include? session[:id] %>
+                                            
+                            <li><%= link_to 'Seguir', "/seguids/seguir/#{params[:id]}" , method: :post %></li>
+                                            
+                        <% else %>
+                                            
+                            <li><%= link_to 'Dejar Seguir', "/seguids/dejar_de_seguir/#{params[:id]}", method: :post %></li>
+                                            
+                        <% end %>
+                                        
+                    <% end %>
+                    </ul>
+                  </div>
+            </nav>    
+        </div>
+        <% if session[:id] == @perfil_amigo.id_usuario %>
+        <div style="margin: 0 0 0 220px;">
+            
+            <form action="/posts/postear" method="POST" 
+            enctype="multipart/form-data" style="background-color: #222;padding: 2% 20%;border-bottom-left-radius: 30px;">
+                <%= token_tag %>
+                <input type="hidden" name="titulo" value="">
+                <textarea name="contenido" class="form-control message-input" placeholder="¿Que estas pensando?"></textarea>
+                <br>
+                <label for="file-upload" class="btn boton_color_verde btn-primary" style="cursor: pointer;position: absolute;color: white;">
+                        <i class="fa fa-upload"></i> Subir Imagen
+                </label>
+                <input id="file-upload" name="foto" type="file" style="display: none;"/>
+                <button class="btn boton_color_verde btn-primary navbar-right" style="margin-right: 5px;">Publicar</button>
+                <div style="clear:both"></div>
+            </form>
+            
+        </div>
+        <% end %>    
+        </div>
+        <div style="position: fixed;top: 60px;left: 10px;padding: 5px;border-radius: 5px;background-color: black;">
+            <%= ('<img  width="200" height="200" class="img-responsive" id="%s" alt="%s" src="data:%s;base64,%s">' % [@imagen_perfil_amigo.id, @imagen_perfil_amigo.filename, @imagen_perfil_amigo.tipo, @imagen_perfil_amigo.data]).html_safe %>
+        </div>
+        <div style="margin: 20px 0 0 220px;">    
+        <div>
+
+                <!--
+                <div class="col-md-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Detalles del perfil</h5>
+                        </div>
+                        
+                        <div>
+                            <div class="ibox-content profile-content">
+                                <h4><strong><%= @perfil_amigo.username.capitalize %></strong></h4>
+                                <p><i class="fa fa-map-marker"></i> <%= @perfil_amigo.pais %> <%= @perfil_amigo.ciudad %> Edo. <%= @perfil_amigo.estado %></p>
+                                <h5>
+                                    Sobre mi
+                                </h5>
+                                <p>
+                                    <%= @perfil_amigo.sobre_mi %>
+                                </p>
+                                <h5>
+                                    Intereses
+                                </h5>
+                                <% @intereses.each do |interes| %>
+                                    <div class="btn btn-xs" style="color: white;background-color: <%= interes.descripcion %>"><%= interes.nombre %></div>
+                                <% end %>
+                                
+                                <div class="row m-t-lg">
+                                    <div class="col-md-3">
+                                        <h5><strong>169</strong> Posts</h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        
+                                        
+                                    </div>
+                                </div>
+                                
+                                <br>
+                                <div class="user-button">
+                                    <div class="row">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                    </div>
+                    -->
+                                    
+                                    <% @postes.each do |posts| %>
+                                    
+                                    <div class="fondo_verde" style="padding: 5px;margin: 0 auto;border-radius: 10px;margin-bottom: 20px;width: 80%;">
+                                        <div style="background-color: white;padding: 5px;">
+                                            <!-- Datos del usuario -->
+                                            <div class="col-md-12">
+                                                <div>
+                                                    <%= link_to perfile_path( @perfil_amigo.id ), class: 'forum-avatar' , method: :get do %>
+                                                        <%= ('<img width="50" id="%s" alt="%s" src="data:%s;base64,%s">' % [@imagen_perfil_amigo.id, @imagen_perfil_amigo.filename, @imagen_perfil_amigo.tipo, @imagen_perfil_amigo.data]).html_safe %>
+                                                    <% end %>
+                                                </div>
+                                                <div>
+                                                    
+                                                    <strong><%= @perfil_amigo.username.capitalize %></strong>
+                                                    <div>
+                                                        <strong>fecha:</strong> <%= posts.post.fecha %>
+                                                    </div>
+                                                    <div style="top: 0;position: absolute;right: 0;">
+                                                        <% if session[:id] == @perfil_amigo.id_usuario %>
+                                                            <%= link_to '<i class="fa fa-times"></i>'.html_safe, "/posts/eliminar_post/#{posts.post.id}", class: "btn btn-danger dim", method: :post %>
+                                                        <% end %>
+                                                    </div>
+                                                </div>
+                                                <div style="clear:both"></div>
+                                                <hr>
+                                            </div>
+                                            
+                                            <!-- Contenido -->
+                                            <div>
+                                                <p style="font-size: 20pt;margin-left: 30px;"><%= posts.post.contenido %></p>
+                                                <hr>
+                                            </div>
+                                            <!-- Imagen si existe -->
+                                            <div>
+                                                <% unless posts.post.estatus.to_i == 0 %>
+                                                    <center>
+                                                        <%= ('<img width="400" height="400" id="%s" alt="%s" src="data:%s;base64,%s">' % [posts.post.imagen.id, posts.post.imagen.filename, posts.post.imagen.tipo, posts.post.imagen.data]).html_safe %>
+                                                    </center>
+                                                    <hr>
+                                                <% end %>
+                                                
+                                            </div>
+                                            <!-- Botones -->
+                                            <div>
+                                                <div class="col-md-4">
+                                                    <center>
+                                                       <% unless session[:id].nil? %>
+                                                            <a class="btn btn-danger dim"><i class="fa fa-heart"></i> Love</a>
+                                                        <% end %> 
+                                                    </center>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <center>
+                                                        <% unless session[:id].nil? %>
+                                                            <a class="btn btn-primary dim" data-toggle="collapse" data-target="#post<%= posts.post.id %>"><i class="fa fa-comments"></i> Comentar</a>
+                                                        <% end %>
+                                                    </center>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <center>
+                                                        <div class="dropdown profile-element"> <span></span>
+                                                                 
+                                                            <a data-toggle="dropdown" class="dropdown-toggle btn btn-info dim" href="#">
+                                                            <span class="text-muted text-xs block"><i class="fa fa-share"> Compartir</i> </span> </a>
+                                                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                                                
+                                                                <li><div class="fb-share-button btn btn-success dim" style="float: left;" data-href="<%= @web_url %>/posts/<%= posts.post.id %>" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<%= @web_uft8 %>%2Fposts%2F<%= posts.post.id %>&amp;src=sdkpreparse" style="height:20px"><i class="fa fa-facebook"></i></a></div></li>
+                                                                <li><div class="btn btn-info dim"><a href="https://twitter.com/share?url=<%= @web_uft8 %>%2Fposts%2F<%= posts.post.id %>&original_referer=<%= @web_uft8 %>%2Fposts%2F<%= posts.post.id %>&text=Univercity <%= @perfil_amigo.username.capitalize %> : <%= posts.post.contenido[0..70] %>. Sigue leyendo en " class="twitter-share-button" data-url="<%= @web_url %>/posts/<%= posts.post.id %>" data-lang="es" data-show-count="false" style="height:20px"><i class="fa fa-twitter"></i></a></div></li>
+                                                            
+                                                            </ul>
+                                                        </div>
+                                                    </center>
+                                                </div>
+                                                <div style="clear:both"></div>
+                                            </div>
+                                            <!-- Comentarios -->
+                                            <div class="col-md-12" style="margin-top: 20px;">
+                                                <!-- Comentar -->
+                                                <div class="media collapse" id="post<%= posts.post.id %>">
+                                                    <div class="media-body" style="width: auto;">
+                                                        <form action="/posts/comentar" method="POST">
+                                                            <%= token_tag %>
+                                                            <input type="hidden" name="id_post" value="<%= posts.post.id %>">
+                                                            <textarea name="contenido" class="form-control" placeholder="Escribe un comentario.."></textarea>
+                                                            <br>
+                                                            <button class="btn btn-primary btn-block">Comentar</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- Comentarios de los usuerios -->
+                                                <% posts.comentario.each do |comentario| %>
+                                                    <div class="col-md-12" style="border-bottom: 1px solid #81cbf7;">
+                                                        <%= link_to perfile_path(comentario.perfil.id_usuario.to_i), method: :get do %>
+                                                            <strong><%= comentario.perfil.username.capitalize %></strong>: 
+                                                        <% end %>
+                                                        <%= comentario.comentario.contenido %>
+                                                
+                                                            <br>
+                                                            <small class="text-muted"> <%= comentario.comentario.fecha %></small>
+                                                    </div>
+                                                    <hr style="border-bottom: 1px solid #81cbf7;">
+                                                    <div style="clear:both"></div>
+                                                <% end %>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both"></div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                    <% end %>
+
+                     </div>           
+        </div>

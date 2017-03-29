@@ -1,0 +1,31 @@
+<% @title= "UCLABOOK - Validar Egresado" %>
+
+  <div class="middle-box text-center loginscreen  animated fadeInDown"
+    style="width: 600px; margin-left: -300px;top:400px">
+        <div style="background: rgba(0, 0, 0, 0.58);padding: 10px 20px;">
+            <div>
+                <h1 class="logo-name"><%= image_tag('homeBN2.png') %></h1>
+            </div>
+            <h3 class="color_verde">Validar cedula</h3>
+            <p style="color:#FFF">Registro esclusivo para egresados de la Universidad Centro-Occidental Lisandro Alvarado</p>
+            <form action="/wellcome/validar_egresado" method="POST" class="m-t form-group">
+                <%= token_tag %>
+                <div class="form-inline">
+                    <select name="nacionalidad" class="form-control">
+                      <option value="V">V</option>
+                      <option value="E">E</option>
+                    </select>
+
+                    <input type="text" name="cedula" class="form-control" placeholder="Cédula" required="">
+                </div><br>
+                <button type="submit" class="btn btn-primary block full-width m-b">Validar</button>
+            </form>
+            
+            <p class="text-muted text-center"><small class="color_verde">¿Ya tienes una Cuenta?</small></p>
+                
+                <%= link_to "Crear una Cuenta", root_path, class: 'btn btn-sm boton_color_verde btn-block', method: :get %>
+
+        </div>
+    </div>
+            
+        

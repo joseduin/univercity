@@ -1,0 +1,32 @@
+<% @title= "UCLABOOK - Registro" %>
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown"
+    style="width: 600px; margin-left: -300px;top:400px">
+        <div style="background: rgba(0, 0, 0, 0.58);padding: 10px 20px;">
+            <div>
+                <h1 class="logo-name"><%= image_tag('homeBN2.png') %></h1>
+            </div>
+            <h3 class="color_verde">Registra tus datos básicos</h3>
+            <form action="/wellcome/validar_registrarse" method="POST" class="m-t"
+            enctype="multipart/form-data">
+                <%= token_tag %>
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" placeholder="Nombre" value="<%= @nombre %> <%= @apellido %>" required="">
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" placeholder="correo" value="<%= @email %>" required="">
+                </div>
+                <div class="form-group">
+                        <input type='file' name="foto" class="form-control" />                    
+                </div>
+                <div class="form-group">
+                    <input type="password" name="clave" class="form-control" placeholder="contraseña" required="">
+                </div>
+               
+                <button type="submit" class="btn btn-primary block full-width m-b">Registro</button>
+
+            </form>
+        </div>
+    </div>
+   
+  

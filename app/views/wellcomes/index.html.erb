@@ -1,0 +1,27 @@
+<% @title= "Univercity - Iniciar Sesión" %>
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown"
+    style="width: 600px; margin-left: -300px;top:400px">
+        <div style="background: rgba(0, 0, 0, 0.58);padding: 10px 20px;">
+            <div>
+                <h1 class="logo-name"><%= image_tag('homeBN2.png') %></h1>
+            </div>
+            <h3 class="color_verde">Iniciar Sesión</h3>
+            <form action="/wellcome/validar_login" method="POST" class="m-t">
+                <%= token_tag %>
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" placeholder="email" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="clave" class="form-control" placeholder="contraeña" required="">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">Iniciar Sesion</button>
+            </form>
+            
+            <!--<a href="#"><small>Olvidó su Contraseña?</small></a>-->
+                <p class="text-muted text-center"><small class="color_verde">¿No tiene creada una Cuenta?</small></p>
+                
+                <%= link_to "Crear una Cuenta", egresado_path, class: 'btn btn-sm boton_color_verde btn-block', method: :get %>
+
+        </div>
+    </div>
